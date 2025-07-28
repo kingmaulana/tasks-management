@@ -20,4 +20,6 @@ try {
   console.log(e);
 }
 
+
+
 export const db = client.db(MONGODB_DATABASE);
