@@ -1,5 +1,5 @@
 import { db } from '../dbConnect.js';
-import { ObjectId, ReturnDocument } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 const collection = await db.collection('user');
 
@@ -25,27 +25,32 @@ export const getUser = async (req, res, next) => {
 }
 
 export const updateUser = async (req, res, next) => {
+  // console.log("🚀 ~ updateUser ~ req:", req.params.id)
   try {
-    if(req.body.password) {
+    if (req.body.password) {
       req.body.password = await bcrypt.hash(req.body.password, 10);
     }
 
     const query = { _id: new ObjectId(req.params.id) };
     const data = {
-      ...req.body,
-      updatedAt: new Date().toISOString(),
-    }
+      $set: {
+        ...req.body,
+        updatedAt: new Date().toISOString(),
+      }
+    };
 
     const options = {
       returnDocument: 'after'
-    }
-
+    };
     const updatedUser = await collection.findOneAndUpdate(query, data, options);
-    const { password: pass, updatedAt, createdAt, ...rest } = updatedUser;
+    const { password, updatedAt, createdAt, ...rest } = updatedUser;
+    res.status(200).json(rest);
+
   } catch (error) {
-    next ({ status: 500, error });
+    next({ status: 500, message: error });
   }
-}
+};
+
 
 export const deleteUser = async (req, res, next) => {
   try {

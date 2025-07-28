@@ -4,31 +4,42 @@ import express from 'express'
 import userRouter from './routes/user.route.js'
 
 const app = express()
-app.use(express.json())
-const PORT = 8001
+const PORT = process.env.PORT || 8001
 
+// Middlewares
+app.use(express.json())
+
+// Routes
 app.use('/api/v1/users', userRouter)
-app.use('/', (req, res) => {
-  res.status(200).json({ message: 'Hello, World!' });
+
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Hello, World!' })
 })
 
+// 404 handler (pastikan setelah semua route!)
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not found' })
+})
 
-app.use(/(.*)/, (req, res) => {
-  res.status(404).json({ message: 'not found' });
-});
+// Error handler middleware
+app.use((err, req, res, next) => {
+  console.error('❌ Error:', err)
+  res.status(err.status || 500).json({
+    status: err.status || 500,
+    message: err.message || 'Internal Server Error'
+  })
+})
 
-// Start server + handle port-in-use error
+// Start server with port conflict handling
 const server = app.listen(PORT, () => {
-  console.log(`✅ Server is running on http://localhost:${PORT}`);
+  console.log(`✅ Server is running on http://localhost:${PORT}`)
 })
 
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
-    console.error(`❌ Port ${PORT} is already in use. Please use a different port.`);
+    console.error(`❌ Port ${PORT} is already in use. Please use a different port.`)
     process.exit(1)
   } else {
     console.error('❌ Unexpected server error:', err)
   }
 })
-
-
