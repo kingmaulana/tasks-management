@@ -3,12 +3,6 @@ import { ObjectId } from 'mongodb';
 
 const collection = await db.collection('user');
 
-export const test = async (req, res) => {
-  let result = await collection.find({}).toArray();
-  res.status(200).json(result);
-}
-
-
 export const getUser = async (req, res, next) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };

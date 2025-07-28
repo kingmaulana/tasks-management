@@ -1,7 +1,7 @@
 import 'dotenv/config'
-import { db } from './dbConnect.js'
 import express from 'express'
 import userRouter from './routes/user.route.js'
+import { errorHanndler } from './libs/middleware.js'
 
 const app = express()
 const PORT = process.env.PORT || 8001
@@ -12,23 +12,20 @@ app.use(express.json())
 // Routes
 app.use('/api/v1/users', userRouter)
 
-app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Hello, World!' })
-})
-
 // 404 handler (pastikan setelah semua route!)
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })
 
 // Error handler middleware
-app.use((err, req, res, next) => {
-  console.error('❌ Error:', err)
-  res.status(err.status || 500).json({
-    status: err.status || 500,
-    message: err.message || 'Internal Server Error'
-  })
-})
+app.use(errorHanndler)
+// app.use((err, req, res, next) => {
+//   console.error('❌ Error:', err)
+//   res.status(err.status || 500).json({
+//     status: err.status || 500,
+//     message: err.message || 'Internal Server Error'
+//   })
+// })
 
 // Start server with port conflict handling
 const server = app.listen(PORT, () => {
