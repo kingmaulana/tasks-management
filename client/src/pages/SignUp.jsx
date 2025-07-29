@@ -11,12 +11,13 @@ import {
   Stack,
   FormErrorMessage
 } from "@chakra-ui/react";
+import toast from "react-hot-toast";
 
 export default function SignUp() {
   const { handleSubmit, register, formState: { errors, isSubmitting } } = useForm();
 
   const doSubmit = async values => {
-    alert('Sign Up Successful. You are now logged in')
+    toast.success('Sign Up Successful. You are now logged in')
   }
   return (
     <Box p={"3"} maxW={"lg"} mx={"auto"}>
