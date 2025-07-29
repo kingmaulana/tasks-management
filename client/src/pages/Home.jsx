@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <Box>
       <Heading>Home</Heading>
-      <Button>Click Me</Button>
+      <Button colorScheme="red">Click Me</Button>
     </Box>
   )
 }
