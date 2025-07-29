@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import toast from "react-hot-toast";
 import { API_BASE_URL } from "../util";
+import { updateUser } from "../../../server/controllers/user.controller";
 
 export default function SignUp() {
   const { handleSubmit, register, formState: { errors, isSubmitting } } = useForm();
@@ -31,6 +32,7 @@ export default function SignUp() {
       const data = await res.json();
       if(res.status === 200) {
         toast.success("Sign up Successful. You are now logged in")
+        updateUser(data);
       } else {
         toast.error(data.message)
       }
