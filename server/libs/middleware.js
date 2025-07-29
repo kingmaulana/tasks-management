@@ -6,5 +6,5 @@ export const errorHanndler = (err, req, res, next ) => {
     console.log(error);
   }
 
-  res.status(status).json({ message: message || defaultMessage });
+  res.status(status).json({ message: message});
 }

@@ -12,12 +12,31 @@ import {
   FormErrorMessage
 } from "@chakra-ui/react";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../util";
 
 export default function SignUp() {
   const { handleSubmit, register, formState: { errors, isSubmitting } } = useForm();
 
   const doSubmit = async values => {
-    toast.success('Sign Up Successful. You are now logged in')
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(values),
+        credentials: "include"
+      })
+
+      const data = await res.json();
+      if(res.status === 200) {
+        toast.success("Sign up Successful. You are now logged in")
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error('Something went wrong.')
+    }
   }
   return (
     <Box p={"3"} maxW={"lg"} mx={"auto"}>
