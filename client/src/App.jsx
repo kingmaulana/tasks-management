@@ -7,12 +7,14 @@ import SignUp from "./pages/SignUp";
 import { UserProvider } from '../context/userContext';
 import PrivateRoute from './components/PrivateRoute';
 import Profile from './pages/Profile';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
     <UserProvider>
      <ChakraProvider>
       <BrowserRouter>
+        <NavBar />
         <Toaster position='bottom-right'/>
         <Routes>
           <Route path="/" element={<Home />} />
