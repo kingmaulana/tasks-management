@@ -17,6 +17,7 @@ import {
 
 export default function NavBar() {
   const { user, updateUser } = useUser();
+  // console.log("🚀 ~ NavBar ~ user:", user)
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
